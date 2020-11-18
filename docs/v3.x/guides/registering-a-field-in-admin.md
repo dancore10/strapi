@@ -394,8 +394,12 @@ This file is already present. Please replace the content of this file wit the fo
 
 ```js
 import pluginPkg from '../../package.json';
-import Wysiwyg from './components/Wysiwyg';
 import pluginId from './pluginId';
+import App from './containers/App';
+import Initializer from './containers/Initializer';
+import lifecycles from './lifecycles';
+import trads from './translations';
+import Wysiwyg from './components/Wysiwyg';
 
 export default strapi => {
   const pluginDescription = pluginPkg.strapi.description || pluginPkg.description;
@@ -406,21 +410,25 @@ export default strapi => {
     description: pluginDescription,
     icon: pluginPkg.strapi.icon,
     id: pluginId,
-    initializer: () => null,
+    initializer: Initializer,
     injectedComponents: [],
     isReady: true,
     isRequired: pluginPkg.strapi.required || false,
-    mainComponent: null,
+    layout: null,
+    lifecycles,
+    leftMenuLinks: [],
+    leftMenuSections: [],
+    mainComponent: App,
     name: pluginPkg.strapi.name,
     preventComponentRendering: false,
-    settings: null,
-    trads: {},
+    trads,
   };
 
   strapi.registerField({ type: 'wysiwyg', Component: Wysiwyg });
 
   return strapi.registerPlugin(plugin);
 };
+
 ```
 
 Finally you will have to rebuild strapi so the new plugin is loaded correctly
